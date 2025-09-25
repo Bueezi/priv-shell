@@ -9,8 +9,8 @@ wifi="wifi-firmware"
 igpu_driver="linux-firmware-amd mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi mesa-vdpau \
 libglvnd-32bit mesa-dri-32bit vulkan-radeon-32bit libvulkan-32bit"
 
-gnome="gnome-core alacritty baobab gnome-calculator gnome-tweaks loupe showtime papers \
-power-profiles-daemon extension-manager gnome-system-monitor gnome-backgrounds"
+gnome="dbus gnome-core alacritty baobab gnome-calculator gnome-tweaks loupe showtime papers \
+power-profiles-daemon extension-manager gnome-system-monitor gnome-backgrounds gsound"
 
 apps="librewolf"
 
