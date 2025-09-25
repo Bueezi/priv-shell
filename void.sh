@@ -1,31 +1,35 @@
+echo "max-transactions=10" | sudo tee /etc/xbps.d/xbps.conf
 # adding repos
 sudo xbps-install -Su void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree
 
-sudo echo "repository=https://github.com/index-0/librewolf-void/releases/latest/download/" > /etc/xbps.d/20-librewolf.conf
+echo "repository=https://github.com/index-0/librewolf-void/releases/latest/download/" | sudo tee /etc/xbps.d/20-librewolf.conf
+# package groups
+wifi="wifi-firmware"
 
-# network driver
-sudo xbps-install -Su wifi-firmware
-# amd iGPU driver
-sudo xbps-install -Su linux-firmware-amd mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi mesa-vdpau
-sudo xbps-install -Su libglvnd-32bit mesa-dri-32bit
-# gnome install
-sudo xbps-install -Su gnome-core alacritty baobab gnome-calculator gnome-tweaks loupe showtime papers power-profiles-daemon extension-manager gnome-system-monitor gnome-backgrounds
+igpu_driver="linux-firmware-amd mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi mesa-vdpau \
+libglvnd-32bit mesa-dri-32bit vulkan-radeon-32bit libvulkan-32bit"
 
-# apps
-sudo xbps-install -Su librewolf
+gnome="gnome-core alacritty baobab gnome-calculator gnome-tweaks loupe showtime papers \
+power-profiles-daemon extension-manager gnome-system-monitor gnome-backgrounds"
 
-# fonts
-sudo xbps-install -Su cantarell-fonts dejavu-fonts-ttf noto-fonts-emoji
+apps="librewolf"
 
-# bash tools
-sudo xbps-install -Su flatpak btop lm_sensors fastfetch vim
+fonts="cantarell-fonts dejavu-fonts-ttf noto-fonts-emoji"
 
-# audio & bluetooth
-sudo xbps-install pipewire wireplumber pipewire-pulse alsa-pipewire libjack-pipewire bluez libspa-bluetooth
+bash_tools="flatpak btop lm_sensors fastfetch vim"
+
+audio_bt="pipewire wireplumber pipewire-pulse alsa-pipewire libjack-pipewire bluez libspa-bluetooth"
+
+# collect everything
+packages="$wifi $igpu_driver $gnome $apps $fonts $bash_tools $audio_bt"
+
+# install
+sudo xbps-install -Su $packages
 
 sudo ln -s /etc/sv/dbus /var/service/
 sudo ln -s /etc/sv/gdm /var/service/
 sudo sv stop dhcpcd
 sudo sv disable dhcpcd
+sudo rm /var/service/dhcpcd
 sudo ln -s /etc/sv/NetworkManager /var/service/
 sudo ln -s /etc/sv/bluetoothd /var/service/
