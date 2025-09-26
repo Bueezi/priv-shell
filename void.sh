@@ -26,6 +26,7 @@ packages="$wifi $igpu_driver $gnome $apps $fonts $bash_tools $audio_bt"
 # install
 sudo xbps-install -Su $packages
 
+"""
 sudo ln -s /etc/sv/dbus /var/service/
 sudo ln -s /etc/sv/gdm /var/service/
 sudo sv stop dhcpcd
@@ -33,3 +34,4 @@ sudo sv disable dhcpcd
 sudo rm /var/service/dhcpcd
 sudo ln -s /etc/sv/NetworkManager /var/service/
 sudo ln -s /etc/sv/bluetoothd /var/service/
+"""
