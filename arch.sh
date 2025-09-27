@@ -78,7 +78,6 @@ sed -i -E \
     -e 's/\bfilesystems\b/sd-encrypt filesystems/' \
     /etc/mkinitcpio.conf
 mkinitcpio -P
-bootctl --path=/boot install
 
 # Enable multilib, parallel downloads, colors, and ILoveCandy
 cp /etc/pacman.conf /etc/pacman.conf.bak
@@ -103,5 +102,7 @@ systemctl enable gdm
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 reflector --country 'Belgium,France,Netherlands,Germany' --age 12 --protocol https --sort rate --latest 10 --save /etc/pacman.d/mirrorlist
 
-echo "Install finished !"
 EOF
+bootctl --path=/mnt/boot install
+
+echo "Install finished !"
