@@ -31,7 +31,7 @@ elif [ "$hardware" == "a" ]; then
 elif [ "$hardware" == "n" ]; then
     hardware="amd-ucode nvidia-open nvidia-utils lib32-nvidia-utils nvidia-settings mesa lib32-mesa"
 fi
-sway="foot dmenu ttf-firacode-nerd"
+sway="foot dmenu ttf-firacode-nerd brightnessctl network-manager-applet blueman wl-clipboard"
 sway_aur="swayfx arc-gtk-theme i3blocks "
 gnome="gdm gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-keyring gnome-tweaks gnome-system-monitor xdg-utils xdg-desktop-portal-gnome gnome-backgrounds gnome-disk-utility power-profiles-daemon nautilus gnome-calculator gnome-text-editor loupe showtime alacritty"
 audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack lib32-pipewire-jack"
