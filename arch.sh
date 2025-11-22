@@ -38,7 +38,8 @@ audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire
 bash_tools="nvim htop btop openssh curl wget bash-completion man-db zip unzip ntfs-3g dosfstools less fastfetch cowsay reflector python python-pip python-virtualenv ffmpeg stress "
 fonts="cantarell-fonts ttf-dejavu noto-fonts-emoji"
 apps="chromium spotify-launcher steam"
-aur="librewolf-bin visual-studio-code-bin teams-for-linux-bin github-desktop-bin"
+aur="librewolf-bin visual-studio-code-bin"
+school="teams-for-linux-bin github-desktop-bin"
 aur_slow="protonup-qt-bin extension-manager ani-cli"
 package_list="$hardware $gnome $audio $bash_tools $fonts $apps"
 
