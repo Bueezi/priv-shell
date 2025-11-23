@@ -25,25 +25,26 @@ sed -i '/#\[multilib\]/,/#Include/ s/^#//' /etc/pacman.conf
 sed -i 's/^ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
 
 if [ "$hardware" == "i" ]; then
-    hardware="intel-ucode mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva libvpl vpl-gpu-rt"
+    hardware="linux intel-ucode mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver libva libvpl vpl-gpu-rt"
 elif [ "$hardware" == "a" ]; then
-    hardware="sof-firmware amd-ucode mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver opencl-mesa radeontop vulkan-tools"
+    hardware="linux sof-firmware amd-ucode mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver lib32-libva-mesa-driver opencl-mesa radeontop vulkan-tools"
 elif [ "$hardware" == "n" ]; then
-    hardware="amd-ucode nvidia-open nvidia-utils lib32-nvidia-utils nvidia-settings mesa lib32-mesa"
+    hardware="linux-zen amd-ucode nvidia-open nvidia-utils lib32-nvidia-utils nvidia-settings libva-nvidia-driver"
 fi
-sway="foot dmenu ttf-firacode-nerd brightnessctl network-manager-applet blueman wl-clipboard"
-sway_aur="swayfx arc-gtk-theme i3blocks "
+sway="sway foot dmenu ttf-firacode-nerd brightnessctl network-manager-applet blueman wl-clipboard swaybg swaylock swayidle xorg-xwayland xdg-desktop-portal-wlr seatd polkit"
+sway_aur="arc-gtk-theme i3blocks"
 gnome="gdm gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-keyring gnome-tweaks gnome-system-monitor xdg-utils xdg-desktop-portal-gnome gnome-backgrounds gnome-disk-utility power-profiles-daemon nautilus gnome-calculator gnome-text-editor loupe showtime alacritty"
+
 audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack lib32-pipewire-jack"
 bash_tools="nvim htop btop openssh curl wget bash-completion man-db zip unzip ntfs-3g dosfstools less fastfetch cowsay reflector python python-pip python-virtualenv ffmpeg stress "
 fonts="cantarell-fonts ttf-dejavu noto-fonts-emoji"
 apps="chromium spotify-launcher steam"
 aur="librewolf-bin visual-studio-code-bin"
 school="teams-for-linux-bin github-desktop-bin"
-aur_slow="protonup-qt-bin extension-manager ani-cli"
-package_list="$hardware $gnome $audio $bash_tools $fonts $apps"
+aur_slow="protonup-qt-bin extension-manager ani-cli ${sway_aur}"
+package_list="$hardware $sway $audio $bash_tools $fonts $apps"
 
-base="linux linux-firmware base base-devel git efibootmgr networkmanager sudo vim bluez ufw cryptsetup"
+base="linux-firmware base base-devel git efibootmgr networkmanager sudo vim bluez ufw cryptsetup"
 
 pacstrap -K /mnt $base  $package_list
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -59,6 +60,7 @@ echo "KEYMAP=be-latin1" >> /etc/vconsole.conf
 echo "arch" >> /etc/hostname
 echo "root:$root_pass" | chpasswd
 useradd -m -G wheel "$usr_name"
+useradd -m -G seat "$usr_name"
 echo "$usr_name:$root_pass" | chpasswd
 sed -i "s/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
 localectl set-keymap be-latin1
@@ -67,6 +69,7 @@ localectl set-keymap be-latin1
 systemctl enable NetworkManager
 systemctl enable bluetooth.service
 systemctl enable ufw
+systemctl enable seatd.service
 ufw default deny incoming
 ufw default allow outgoing
 
@@ -98,7 +101,7 @@ su - $usr_name -c "yay -S --noconfirm $aur $aur_slow"
 
 sed -i "/^$usr_name ALL=(ALL) NOPASSWD: ALL$/d" /etc/sudoers # Remove NOPASSWD line
 
-systemctl enable gdm
+#systemctl enable gdm
 
 # Local Pacman mirrors
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
