@@ -63,7 +63,7 @@ useradd -m -G wheel "$usr_name"
 useradd -m -G seat "$usr_name"
 echo "$usr_name:$root_pass" | chpasswd
 sed -i "s/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
-localectl set-keymap be-latin1
+#localectl set-keymap be-latin1
 
 
 systemctl enable NetworkManager
