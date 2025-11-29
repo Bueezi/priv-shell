@@ -22,7 +22,7 @@ smart_gaps on
 default_border none
 
 ### Output
-output * bg ~/.wall.jpg fill
+output * bg ~/.config/wall.jpg fill
 
 output DP-3 mode 2560x1440@180.000Hz allow_tearing yes
 
