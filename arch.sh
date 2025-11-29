@@ -93,7 +93,7 @@ fi;
 mkdir /boot/loader/entries
 touch /boot/loader/entries/arch.conf
 
-echo -e "title   Arch Linux\nlinux   /vmlinuz-linux\ninitrd  /initramfs-linux.img\noptions rd.luks.name=${LUKS_UUID}=cryptroot root=/dev/mapper/cryptroot rw"
+echo -e "title   Arch Linux\nlinux   /vmlinuz-linux\ninitrd  /initramfs-linux.img\noptions rd.luks.name=${LUKS_UUID}=cryptroot root=/dev/mapper/cryptroot rw" > /boot/loader/entries/arch.conf
 sed -i -E \
     -e 's/\budev\b/systemd/g' \
     -e 's/\bkeymap\b//g' \
