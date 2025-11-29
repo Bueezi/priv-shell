@@ -66,7 +66,7 @@ hwclock --systohc
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" >> /etc/locale.conf
-echo "KEYMAP=be-latin1" >> /etc/vconsole.conf
+echo "KEYMAP=us" >> /etc/vconsole.conf
 echo "arch" >> /etc/hostname
 echo "root:$root_pass" | chpasswd
 useradd -m -G wheel,seat "$usr_name"
