@@ -3,7 +3,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    # ./hyprland.nix
   ];
 
   # ────────────────────────────────────────────────
@@ -73,7 +72,7 @@
   users.users.ben = {
     isNormalUser = true;
     description = "Ben";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
   };
 
   # ────────────────────────────────────────────────
@@ -88,6 +87,8 @@
     optimise.automatic = true;
   };
 
+  #virtualisation.docker.enable = true;
+
   # ────────────────────────────────────────────────
   # Packages
   # ────────────────────────────────────────────────
@@ -100,6 +101,7 @@
     less
     wl-clipboard
     powertop
+    git
 
     # Editors & dev
     neovim
@@ -110,6 +112,7 @@
     # Browsers
     librewolf
     ungoogled-chromium
+    chatbox
 
     # Media & entertainment
     spotify
