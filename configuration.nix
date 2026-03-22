@@ -87,7 +87,7 @@
     optimise.automatic = true;
   };
 
-  #virtualisation.docker.enable = true;
+  virtualisation.docker.enable = true;
 
   # ────────────────────────────────────────────────
   # Packages
@@ -102,24 +102,25 @@
     wl-clipboard
     powertop
     git
+    gcc
+    zip
+    unzip
 
     # Editors & dev
     neovim
     vscode
     nodejs_24
     dotnet-sdk_10
-
+    
     # Browsers
     librewolf
     ungoogled-chromium
-    chatbox
 
     # Media & entertainment
     spotify
     vesktop
     ffmpeg
     ani-cli
-    stremio
 
     # Office & tools
     libreoffice
@@ -132,6 +133,7 @@
     cosmic-ext-tweaks
     cosmic-ext-calculator
     baobab
+    nomacs
   ];
 
   programs.steam = {
