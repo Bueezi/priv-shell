@@ -138,7 +138,7 @@ sed -i "/^$usr_name ALL=(ALL) NOPASSWD: ALL$/d" /etc/sudoers # Remove NOPASSWD l
 
 # Local Pacman mirrors
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-reflector --country 'Belgium,France,Netherlands,Germany' --age 12 --protocol https --sort rate --latest 10 --save /etc/pacman.d/mirrorlist
+reflector --country 'Belgium,France,Netherlands,Germany' --age 12 --protocol https --sort rate --fastest 10 --save /etc/pacman.d/mirrorlist
 
 EOF
 bootctl --path=/mnt/boot install
