@@ -1,0 +1,39 @@
+[theme]
+theme = "plain"
+
+[theme.overrides]
+idle_bg      = "#101010"
+idle_fg      = "#f6f1ea"
+info_bg      = "#101010"
+info_fg      = "#f6f1ea"
+good_bg      = "#101010"
+good_fg      = "#f6f1ea"
+warning_bg   = "#101010"
+warning_fg   = "#afa193"
+critical_bg  = "#101010"
+critical_fg  = "#f6f1ea"
+separator    = ""
+separator_bg = "#101010"
+separator_fg = "#101010"
+
+[icons]
+icons = "none"
+
+[[block]]
+block = "time"
+interval = 3
+format = "$timestamp.datetime(f:'%H:%M %A, %b %d', l:en_US)                                                                       "
+
+
+[[block]]
+block = "sound"
+format = " vol:$volume "
+
+[[block]]
+block = "battery"
+interval = 30
+format = " bat: $percentage "
+
+[[block]]
+block = "backlight"
+format = " bl: $brightness "
