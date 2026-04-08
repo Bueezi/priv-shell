@@ -52,8 +52,8 @@ fi
 
 
 if [ "$wm" == "sway" ]; then
-    wm_packages="foot fuzzel mako polkit-gnome brightnessctl network-manager-applet networkmanager-dmenu blueman dmenu-bluetooth wl-clipboard cliphist swaylock swayidle xorg-xwayland xdg-desktop-portal-wlr seatd polkit nwg-look i3status-rust grim slurp thunar"
-    wm_packages_aur="swayfx"
+    wm_packages="swaybg foot fuzzel mako polkit-gnome brightnessctl network-manager-applet networkmanager-dmenu blueman wl-clipboard cliphist swaylock swayidle xorg-xwayland xdg-desktop-portal-wlr seatd polkit nwg-look i3status-rust grim slurp thunar"
+    wm_packages_aur="swayfx dmenu-bluetooth"
 elif [ "$wm" == "gnome" ]; then
     wm_packages="gdm gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-system-monitor xdg-utils xdg-desktop-portal-gnome gnome-backgrounds gnome-disk-utility power-profiles-daemon nautilus gnome-calculator gnome-text-editor loupe showtime alacritty gvfs"
     wm_packages_aur="extension-manager"
