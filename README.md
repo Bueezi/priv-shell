@@ -1,10 +1,14 @@
 > **Personal Repository:** These are my actual configuration files. This README documents my workflow; it is not a tutorial or generic template.
 
+# Dotfiles Bare Repository
+
+This is a bare Git repository tracking configuration files in`$HOME` via the`config` alias.
+
 ## Setup on a New Machine
 
 ```bash
-git clone --bare <repo-url> $HOME/.cfg
-alias config='/usr/bin/git --git-dir=$HOME/.cfg --work-tree=$HOME'
+git clone --bare <repo-url> $HOME/.dotfiles
+alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 config config --local status.showUntrackedFiles no
 config checkout
 ```
@@ -39,9 +43,9 @@ config push
 
 Add to`.bashrc` or`.zshrc`:
 ```bash
-alias config='/usr/bin/git --git-dir=$HOME/.cfg --work-tree=$HOME'
+alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 ```
 
 ## How It Works
 
-This uses Git's`work-tree` feature. The bare repository lives in`~/.cfg` while`$HOME` acts as the working tree. The`status.showUntrackedFiles no` setting prevents`config status` from flooding your terminal with every untracked file in your home directory.
+This uses Git's`work-tree` feature. The bare repository lives in`~/.dotfiles` while`$HOME` acts as the working tree. The`status.showUntrackedFiles no` setting prevents`config status` from flooding your terminal with every untracked file in your home directory.
