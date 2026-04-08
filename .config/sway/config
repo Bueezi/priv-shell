@@ -64,7 +64,7 @@ set $term foot
 set $menu fuzzel
 
 ### Output configuration
-output * bg ~/Documents/wallpaper/car.jpg fill
+output * bg ~/.config/wall.jpg fill
 
 output eDP-1 {
     scale 1.35
