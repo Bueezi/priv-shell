@@ -50,7 +50,7 @@ elif [ "$wm" == "gnome" ]; then
 fi
 
 audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack lib32-pipewire-jack"
-bash_tools="libva-utils neovim htop btop openssh curl wget bash-completion man-db man-pages zip unzip 7zip ntfs-3g dosfstools less fastfetch cowsay reflector python python-virtualenv ffmpeg mpv stress gamemode lib32-gamemode rust fd xdg-user-dirs"
+bash_tools="bc libva-utils neovim htop btop openssh curl wget bash-completion man-db man-pages zip unzip 7zip ntfs-3g dosfstools less fastfetch cowsay reflector python python-virtualenv ffmpeg mpv stress gamemode lib32-gamemode rust fd xdg-user-dirs"
 fonts="ttf-iosevka-nerd ttf-jetbrains-mono-nerd ttf-noto-nerd"
 apps="chromium spotify-launcher steam vlc zed"
 aur="librewolf-bin visual-studio-code-bin $wm_packages_aur"

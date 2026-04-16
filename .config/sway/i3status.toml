@@ -34,6 +34,9 @@ block = "battery"
 interval = 30
 format = " bat: $percentage "
 
+
 [[block]]
 block = "backlight"
 format = " bl: $brightness "
+[[block.click]]
+button = "left"

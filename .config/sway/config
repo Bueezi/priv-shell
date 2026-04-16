@@ -45,7 +45,7 @@ exec sh -c 'rm -f ~/.cache/cliphist/db && exec wl-paste --watch cliphist store'
 #exec waybar -c ~/.config/sway/waybar -s ~/.config/sway/style.css
 exec ~/.config/sway/scripts/battery-notify.sh
 exec mako --background-color "#000000" --text-color "#ffffff" --border-color "#555555" --border-radius 6 --padding 10 --margin 10 --default-timeout 4000 --anchor top-right
-exec swayidle timeout 300 'swaylock -f -c 000000' timeout 330 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' before-sleep 'swaylock -f -c 000000'
+exec swayidle timeout 180 'swaylock' timeout 200 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' before-sleep 'swaylock -f -c 000000'
 
 # keyring
 exec eval $(gnome-keyring-daemon --start --components=secrets)
@@ -96,8 +96,8 @@ bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy && notify-send "Screens
 bindsym $mod+Shift+n exec networkmanager_dmenu
 bindsym $mod+Shift+b exec env DMENU_BLUETOOTH_LAUNCHER=fuzzel dmenu-bluetooth
 bindsym $mod+Shift+p exec ~/.config/sway/scripts/power.sh
-bindsym $mod+Escape exec swaylock --image ~/Documents/wallpaper/car.jpg --indicator-radius 120 --indicator-thickness 15 --ring-color 4c7899 --inside-color 00000000 --line-color 00000000 --key-hl-color e24b4b --bs-hl-color ebcb8b --text-color ffffffff
-
+bindsym $mod+Escape exec swaylock
+bindsym print exec systemctl sleep 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
     # Despite the name, also works for non-floating windows.
@@ -231,7 +231,6 @@ bindsym $mod+r mode "resize"
     bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
     bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
     # Special key to take a screenshot with grim
-    bindsym Print exec grim
 
 bar {
     position top

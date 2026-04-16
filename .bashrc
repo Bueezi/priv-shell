@@ -18,6 +18,10 @@ fi
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
+alias gc='gcc -std=c99 -Wall -Wextra -pedantic'
+
+alias hx='helix'
+
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/home/ben/.lmstudio/bin"
 # End of LM Studio CLI section
