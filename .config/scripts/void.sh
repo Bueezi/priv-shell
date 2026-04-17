@@ -1,17 +1,30 @@
-echo -n "What WM do u want gnome or sway ? (gnome/sway): " && read wm
+# load installer to ram
+# root:voidlinux
+# gdisk partitions: 1gb fat32 at /boot, swap(1.5* ram if wanna hibernate), ext4
+# void-installer
+# 
 
+echo -n "What WM do u want gnome or sway ? (gnome/sway): " && read wm
+echo -n "Are u using intel, amd or nvidia ? (i/a/n): " && read hardware
 
 echo "max-transactions=10" | sudo tee /etc/xbps.d/xbps.conf
-# adding repos
-sudo xbps-install -Su void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree
-
+sudo xbps-install -Su void-repo-nonfree #void-repo-multilib void-repo-multilib-nonfree
 echo "repository=https://github.com/index-0/librewolf-void/releases/latest/download/" | sudo tee /etc/xbps.d/20-librewolf.conf
-# package groups
+
+if lscpu | grep -q "GenuineIntel"; then
+    ucode="intel-ucode" # intel-ucode needs initramfs regeneration!!!
+else
+    ucode="linux-firmware-amd" # both cpu & gpu
+fi
+
+if [ "$hardware" == "i" ]; then
+    hardware=""
+elif [ "$hardware" == "a" ]; then
+    hardware="$ucode mesa-dri vulkan-loader mesa-vulkan-radeon amdvlk mesa-vaapi libvdpau-va-gl"
+fi
+
+# need to set LIBVA_DRIVER_NAME to radeonsi and VDPAU_DRIVER to va_gl
 wifi="wifi-firmware"
-
-igpu_driver="linux-firmware-amd mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi mesa-vdpau \
-libglvnd-32bit mesa-dri-32bit vulkan-radeon-32bit libvulkan-32bit"
-
 
 if [ "$wm" == "sway" ]; then
   wm_packages="sway swaybg foot fuzzel mako polkit-gnome brightnessctl network-manager-applet networkmanager-dmenu \
@@ -22,16 +35,16 @@ elif [ "$wm" == "gnome" ]; then
   power-profiles-daemon extension-manager gnome-system-monitor gnome-backgrounds gsound"
 fi
 
-apps="librewolf"
+audio="pipewire wireplumber pipewire-pulse alsa-pipewire libjack-pipewire bluez libspa-bluetooth"
+apps="helix librewolf chromium baobab libreoffice-still"
+fonts="font-iosevka noto-fonts-ttf"
+bash_tools="git bc vim htop btop openssh wireguard-tools curl wget bash-completion man-db \
+man-pages zip unzip 7zip ntfs-3g dosfstools less \
+fastfetch cowsay cmatrix ffmpeg mpv stress gamemode fd nnn"
+dev="github-cli nodejs npm rust gdb python python3-pip python-virtualenv docker docker-compose"
+base="qt5-wayland qt6-wayland gnome-keyring"
 
-fonts="cantarell-fonts dejavu-fonts-ttf noto-fonts-emoji"
-
-bash_tools="flatpak btop lm_sensors fastfetch vim"
-
-audio_bt="pipewire wireplumber pipewire-pulse alsa-pipewire libjack-pipewire bluez libspa-bluetooth"
-
-# collect everything
-packages="$wifi $igpu_driver $gnome $apps $fonts $bash_tools $audio_bt"
+packages="$hardware $wm_packages $wifi $apps $fonts $bash_tools $audio $dev $base"
 
 # install
 sudo xbps-install -Su $packages
