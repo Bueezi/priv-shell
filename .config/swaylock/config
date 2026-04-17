@@ -1,0 +1,11 @@
+# ~/.config/swaylock/config
+
+image=~/Documents/wallpaper/car.jpg
+indicator-radius=120
+indicator-thickness=15
+ring-color=4c7899
+inside-color=00000000
+line-color=00000000
+key-hl-color=e24b4b
+bs-hl-color=ebcb8b
+text-color=ffffffff

@@ -1,3 +1,6 @@
+echo -n "What WM do u want gnome or sway ? (gnome/sway): " && read wm
+
+
 echo "max-transactions=10" | sudo tee /etc/xbps.d/xbps.conf
 # adding repos
 sudo xbps-install -Su void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree
@@ -9,8 +12,15 @@ wifi="wifi-firmware"
 igpu_driver="linux-firmware-amd mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi mesa-vdpau \
 libglvnd-32bit mesa-dri-32bit vulkan-radeon-32bit libvulkan-32bit"
 
-gnome="dbus gnome-core alacritty baobab gnome-calculator gnome-tweaks loupe showtime papers \
-power-profiles-daemon extension-manager gnome-system-monitor gnome-backgrounds gsound"
+
+if [ "$wm" == "sway" ]; then
+  wm_packages="sway swaybg foot fuzzel mako polkit-gnome brightnessctl network-manager-applet networkmanager-dmenu \
+   blueman wl-clipboard cliphist swaylock swayidle xorg-xwayland xdg-desktop-portal-wlr seatd polkit nwg-look \
+   i3status-rust grim slurp thunar"
+elif [ "$wm" == "gnome" ]; then
+  wm_packages="dbus gnome-core alacritty baobab gnome-calculator gnome-tweaks loupe showtime papers \
+  power-profiles-daemon extension-manager gnome-system-monitor gnome-backgrounds gsound"
+fi
 
 apps="librewolf"
 

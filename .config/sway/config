@@ -2,11 +2,11 @@
 
 #animation_duration_ms 250
 
-blur enable
+# blur enable
 # blur_xray enables wallpaper blurring without blurring windows below
-blur_xray disable
-blur_passes 1
-blur_radius 4
+# blur_xray disable
+# blur_passes 1
+# blur_radius 4
 # blur_noise <float value 0 - 1>
 # blur_brightness <float value 0 - 2>
 # blur_contrast <float value 0 - 2>
@@ -14,13 +14,13 @@ blur_radius 4
 
 # Window corners can be rounded in SwayFX
 # corner_radius can be any number of pixels
-#corner_radius 3
-#gaps inner 0
+# corner_radius 10
+gaps inner 5
 # corner radius needs gaps to be visible
 
 # SwayFX also features window drop shadows, which, of course, can be enabled at any time
-shadows disable
-shadows_on_csd enable
+# shadows disable
+# shadows_on_csd enable
 
 # You can also offset the shadow's position, make unfocused windows have different shadows, give shadows a nondefault color, and blur shadows
 # shadow_inactive_color #0000007F
@@ -45,7 +45,7 @@ exec sh -c 'rm -f ~/.cache/cliphist/db && exec wl-paste --watch cliphist store'
 #exec waybar -c ~/.config/sway/waybar -s ~/.config/sway/style.css
 exec ~/.config/sway/scripts/battery-notify.sh
 exec mako --background-color "#000000" --text-color "#ffffff" --border-color "#555555" --border-radius 6 --padding 10 --margin 10 --default-timeout 4000 --anchor top-right
-exec swayidle timeout 180 'swaylock' timeout 200 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' before-sleep 'swaylock -f -c 000000'
+exec swayidle timeout 180 'swaylock' timeout 190 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' before-sleep 'swaylock -f -c 000000'
 
 # keyring
 exec eval $(gnome-keyring-daemon --start --components=secrets)

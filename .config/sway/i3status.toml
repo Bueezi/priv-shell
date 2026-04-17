@@ -24,10 +24,9 @@ block = "time"
 interval = 3
 format = "$timestamp.datetime(f:'%H:%M %A, %b %d', l:en_US)                                                                       "
 
-
 [[block]]
 block = "sound"
-format = " vol:$volume "
+format = " vol:{$volume|} "
 
 [[block]]
 block = "battery"

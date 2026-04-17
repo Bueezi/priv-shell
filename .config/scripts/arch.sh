@@ -2,7 +2,7 @@
 # iwctl
 #	station <device> connect "SSID"
 # ping 8.8.8.8
-# timedatectl
+#  gnome-themes-extratimedatectl
 
 # gdisk, cryptsetup, mkfs
 
@@ -52,20 +52,28 @@ fi
 
 
 if [ "$wm" == "sway" ]; then
-    wm_packages="swaybg foot fuzzel mako polkit-gnome brightnessctl network-manager-applet networkmanager-dmenu blueman wl-clipboard cliphist swaylock swayidle xorg-xwayland xdg-desktop-portal-wlr seatd polkit nwg-look i3status-rust grim slurp thunar"
-    wm_packages_aur="swayfx dmenu-bluetooth"
+    wm_packages="sway swaybg swaylock swayidle swaybar wl-clipboard xorg-xwayland xdg-desktop-portal-wlr seatd polkit polkit-gnome \
+    foot fuzzel mako i3status-rust brightnessctl networkmanager-dmenu grim slurp cliphist power-profiles-daemon \
+    blueman nwg-look thunar gnome-themes-extra"
+    wm_packages_aur=""
 elif [ "$wm" == "gnome" ]; then
-    wm_packages="gdm gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-system-monitor xdg-utils xdg-desktop-portal-gnome gnome-backgrounds gnome-disk-utility power-profiles-daemon nautilus gnome-calculator gnome-text-editor loupe showtime alacritty gvfs"
+    wm_packages="gdm gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks \
+    gnome-system-monitor xdg-utils xdg-desktop-portal-gnome gnome-backgrounds gnome-disk-utility \
+    power-profiles-daemon nautilus gnome-calculator gnome-text-editor loupe showtime alacritty gvfs"
     wm_packages_aur="extension-manager"
 fi
 
 audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack lib32-pipewire-jack"
-bash_tools="bc libva-utils neovim htop btop openssh wireguard-tools curl wget bash-completion man-db man-pages zip unzip 7zip ntfs-3g dosfstools less fastfetch cowsay ffmpeg mpv stress gamemode lib32-gamemode fd"
+
+bash_tools="bc vim htop btop openssh wireguard-tools curl wget bash-completion man-db \
+man-pages zip unzip 7zip ntfs-3g dosfstools less \
+fastfetch cowsay cmatrix ffmpeg mpv stress gamemode lib32-gamemode fd nnn"
+
 fonts="ttf-iosevka-nerd ttf-jetbrains-mono-nerd ttf-noto-nerd"
-apps="chromium spotify-launcher steam vlc zed libreoffice-still"
-aur="librewolf-bin visual-studio-code-bin $wm_packages_aur"
-dev="nodejs npm rust python python-pip python-virtualenv docker docker-compose"
-#aur_slow="protonplus ani-cli stremio lmstudio-bin"
+apps="helix chromium steam vlc zed baobab libreoffice-still"
+aur="librewolf-bin $wm_packages_aur"
+dev="github-cli nodejs npm rust gdb python python-pip python-virtualenv docker docker-compose"
+#aur_slow="protonplus ani-cli stremio" 
 package_list="$hardware $wm_packages $audio $bash_tools $fonts $apps $dev"
 
 base="linux-firmware base base-devel git efibootmgr networkmanager sudo vi vim bluez bluez-utils ufw cryptsetup reflector qt5-wayland qt6-wayland gnome-keyring"
