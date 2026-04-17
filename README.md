@@ -7,7 +7,7 @@ This is a bare Git repository tracking configuration files in`$HOME` via the`con
 ## Setup on a New Machine
 
 ```bash
-git clone --bare git@github.com:Bueezi/dotfiles.git $HOME/.dotfiles
+git clone --bare https://github.com/Bueezi/dotfiles.git $HOME/.dotfiles
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 config config --local status.showUntrackedFiles no
 config checkout
