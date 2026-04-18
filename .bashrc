@@ -11,18 +11,16 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
 
-
-if [ "$(tty)" = "/dev/tty1" ]; then
-    exec sway
-fi
-
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 alias gc='gcc -std=c99 -Wall -Wextra -pedantic'
 
-alias hx='helix'
+#alias hx='helix'
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/ben/.lmstudio/bin"
-# End of LM Studio CLI section
-
+_host=$(hostname)
+if [ "$_host" = "void" ]; then
+    alias sudo='doas'
+    alias xi='doas xbps-install'
+    alias helix='hx'
+    alias btop='doas btop --force-utf'
+fi

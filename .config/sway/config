@@ -40,9 +40,9 @@ smart_gaps on
 
 font pango:Noto Sans 10
 
-# Autostart
+# Autostart - System
+exec pipewire; exec pipewire-pulse; exec wireplumber
 exec sh -c 'rm -f ~/.cache/cliphist/db && exec wl-paste --watch cliphist store'
-#exec waybar -c ~/.config/sway/waybar -s ~/.config/sway/style.css
 exec ~/.config/sway/scripts/battery-notify.sh
 exec mako --background-color "#000000" --text-color "#ffffff" --border-color "#555555" --border-radius 6 --padding 10 --margin 10 --default-timeout 4000 --anchor top-right
 exec swayidle timeout 180 'swaylock' timeout 190 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' before-sleep 'swaylock -f -c 000000'
@@ -50,7 +50,6 @@ exec swayidle timeout 180 'swaylock' timeout 190 'swaymsg "output * power off"' 
 # keyring
 exec eval $(gnome-keyring-daemon --start --components=secrets)
 exec dbus-update-activation-environment --systemd DISPLAY XAUTHORITY WAYLAND_DISPLAY
-
 
 # Default config for Sway
 

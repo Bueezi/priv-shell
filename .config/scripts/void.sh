@@ -28,12 +28,13 @@
 # void-installer
 #
 
+
 echo -n "What WM do u want gnome or sway ? (gnome/sway): " && read wm
 echo -n "Are u using intel, amd ? (i/a): " && read hardware
 
-echo "max-transactions=10" | sudo tee /etc/xbps.d/xbps.conf
-sudo xbps-install -Su void-repo-nonfree #void-repo-multilib void-repo-multilib-nonfree
-echo "repository=https://github.com/index-0/librewolf-void/releases/latest/download/" | sudo tee /etc/xbps.d/20-librewolf.conf
+echo "max-transactions=10" > /etc/xbps.d/xbps.conf
+xbps-install -Su void-repo-nonfree #void-repo-multilib void-repo-multilib-nonfree
+echo "repository=https://github.com/index-0/librewolf-void/releases/latest/download/" > /etc/xbps.d/20-librewolf.conf
 
 if lscpu | grep -q "GenuineIntel"; then
     ucode="intel-ucode" # intel-ucode needs initramfs regeneration!!!
@@ -53,13 +54,13 @@ wifi="iwd"
 if [ "$wm" == "sway" ]; then
   wm_packages="sway swaybg foot fuzzel mako polkit-gnome brightnessctl power-profiles-daemon \
    blueman wl-clipboard cliphist swaylock swayidle seatd polkit nwg-look \
-   i3status-rust grim slurp thunar"
+   i3status-rust grim slurp"
 elif [ "$wm" == "gnome" ]; then
   wm_packages="elogind gnome-core alacritty gnome-calculator gnome-tweaks loupe showtime papers \
   power-profiles-daemon extension-manager gnome-system-monitor gnome-backgrounds gsound"
 fi
 
-audio="pipewire wireplumber pipewire-pulse alsa-pipewire libjack-pipewire bluez libspa-bluetooth rtkit"
+audio="pipewire wireplumber alsa-pipewire libjack-pipewire bluez libspa-bluetooth rtkit"
 apps="helix librewolf chromium baobab libreoffice"
 fonts="font-iosevka noto-fonts-ttf font-awesome"
 bash_tools="git bc vim htop btop openssh wireguard-tools curl wget bash-completion man-db \
@@ -71,32 +72,32 @@ base="nftables dbus xorg-server-xwayland xdg-desktop-portal xdg-desktop-portal-g
 packages="$hardware $wm_packages $wifi $apps $fonts $bash_tools $audio $dev $base"
 
 # install
-sudo xbps-install -Su $packages
+xbps-install -Su $packages
 
 if echo "$packages" | grep -q intel-ucode; then
-    sudo xbps-reconfigure -f linux
+    xbps-reconfigure -f linux
 fi
 
 # Services to enable (run these after reboot into the base system)
-sudo ln -s /etc/sv/dbus /var/service/
-sudo ln -s /etc/sv/seatd /var/service/
-sudo ln -s /etc/sv/power-profiles-daemon /var/service/
-sudo ln -s /etc/sv/bluetoothd /var/service/
-sudo ln -s /etc/sv/nftables /var/service/ # firewall
-sudo ln -s /etc/sv/iwd /var/service/
-sudo ln -s /etc/sv/rtkit /var/service/ # Needed for Pipewire priority
+ln -s /etc/sv/dbus /var/service/
+ln -s /etc/sv/seatd /var/service/
+ln -s /etc/sv/power-profiles-daemon /var/service/
+ln -s /etc/sv/bluetoothd /var/service/
+ln -s /etc/sv/nftables /var/service/ # firewall
+ln -s /etc/sv/iwd /var/service/
+ln -s /etc/sv/rtkit /var/service/ # Needed for Pipewire priority
 
-sudo ln -s /etc/sv/polkitd /var/service/
+ln -s /etc/sv/polkitd /var/service/
 
 # Add your user to required groups
-sudo usermod -aG _seatd,audio,video,input,bluetooth "$USER"
+usermod -aG _seatd,audio,video,input,bluetooth "$USER"
 
 # add dotfiles and dotfiles git syncing command
-git clone --bare https://github.com/Bueezi/dotfiles.git $HOME/.dotfiles
-cfg() { /usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"; }
-cfg config --local status.showUntrackedFiles no
-cfg checkout 2>&1 | grep -E "^\s+\." | awk '{print $1}' | xargs -I{} rm -f -- "$HOME/{}"
-cfg checkout
+# git clone --bare https://github.com/Bueezi/dotfiles.git $HOME/.dotfiles
+# cfg() { /usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"; }
+# cfg config --local status.showUntrackedFiles no
+# cfg checkout 2>&1 | grep -E "^\s+\." | awk '{print $1}' | xargs -I{} rm -f -- "$HOME/{}"
+# cfg checkout
 
 # things to do after install :
 # exec pipewire manually in sway : exec pipewire & exec wireplumber & exec pipewire-pulse

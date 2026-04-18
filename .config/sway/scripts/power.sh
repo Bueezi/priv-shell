@@ -2,8 +2,16 @@
 choice=$(printf "  Sleep\n  Hibernate\n  Shutdown" |
   fuzzel --dmenu --width 20 --lines 3)
 
-case "$choice" in
-*Sleep) systemctl suspend ;;
-*Hibernate) systemctl hibernate ;;
-*Shutdown) systemctl poweroff ;;
-esac
+if [ "$(hostname)" = "void" ]; then
+    case "$choice" in
+    *Sleep)     loginctl suspend ;;
+    *Hibernate) loginctl hibernate ;;
+    *Shutdown)  loginctl poweroff ;;
+    esac
+else
+    case "$choice" in
+    *Sleep)     systemctl suspend ;;
+    *Hibernate) systemctl hibernate ;;
+    *Shutdown)  systemctl poweroff ;;
+    esac
+fi
