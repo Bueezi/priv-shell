@@ -12,30 +12,27 @@ warning_bg   = "#101010"
 warning_fg   = "#afa193"
 critical_bg  = "#101010"
 critical_fg  = "#f6f1ea"
-separator    = ""
-separator_bg = "#101010"
-separator_fg = "#101010"
-
-[icons]
-icons = "none"
-
-[[block]]
-block = "time"
-interval = 3
-format = "$timestamp.datetime(f:'%H:%M %A, %b %d', l:en_US)                                                                       "
+separator    = " / "
+# separator_bg = "#101010"
+# separator_fg = "#101010"
 
 [[block]]
 block = "sound"
-format = " vol:{$volume|} "
+format = "vol:{$volume|} "
 
 [[block]]
 block = "battery"
 interval = 30
-format = " bat: $percentage "
+format = "bat: $percentage "
 
 
 [[block]]
 block = "backlight"
-format = " bl: $brightness "
+format = "bl: $brightness "
 [[block.click]]
 button = "left"
+
+[[block]]
+block = "time"
+interval = 5
+format = "$timestamp.datetime(f:'%a %d/%m %R')"

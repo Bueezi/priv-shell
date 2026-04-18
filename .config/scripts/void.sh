@@ -66,7 +66,7 @@ fonts="font-iosevka noto-fonts-ttf font-awesome"
 bash_tools="git bc vim htop btop openssh wireguard-tools curl wget bash-completion man-db \
 man-pages zip unzip 7zip ntfs-3g dosfstools less \
 fastfetch cowsay cmatrix ffmpeg mpv stress gamemode fd nnn"
-dev="github-cli nodejs rust gdb python3 python3-pip python3-virtualenv podman podman-compose"
+dev="github-cli nodejs rust cargo gdb python3 python3-pip python3-virtualenv podman podman-compose"
 base="nftables dbus xorg-server-xwayland xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr xdg-user-dirs qt5-wayland qt6-wayland gnome-keyring libva-utils"
 
 packages="$hardware $wm_packages $wifi $apps $fonts $bash_tools $audio $dev $base"

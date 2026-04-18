@@ -9,6 +9,7 @@ export PATH="/home/ben/.cargo/bin:$PATH"
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+
 PS1='[\u@\h \W]\$ '
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
@@ -24,3 +25,4 @@ if [ "$_host" = "void" ]; then
     alias helix='hx'
     alias btop='doas btop --force-utf'
 fi
+export PATH=$HOME/.local/bin:$PATH
