@@ -1,6 +1,30 @@
 # load installer to ram
 # root:voidlinux
-# gdisk partitions: 1gb fat32 at /boot, swap(1.5* ram if wanna hibernate), ext4
+# bash
+# setfont -d
+# fdisk partitions: 1gb vfat at /boot, swap(1.5* ram if wanna hibernate), ext4
+# mkfs
+# mount /mnt and /mnt/boot
+# mkdir -p /mnt/var/db/xbps/keys
+# cp /var/db/xbps/keys/* /mnt/var/db/xbps/keys
+# REPO=https://repo-default.voidlinux.org/current/musl
+# XBPS_ARCH=x86_64-musl xbps-install -S -r /mnt base-container linux linux-firmware bash vim cpio kpartx kmod eudev ncurses kbd dhcpcd booster
+# xgenfstab -U /mnt >> /mnt/etc/fstab
+# xchroot /mnt /bin/bash
+# ln -sf /usr/share/zoneinfo/Europe/Brussels /etc/localtime
+# echo "void" > /etc/hostname
+# if glibc set locale
+# useradd -mG wheel,audio,video,storage,optical,plugdev ben
+# passwd
+# install opendoas
+# echo "permit ben as root" > /etc/doas.conf
+# install gummiboot
+# bootctl install --path=/boot
+# remove dracut
+# xbps-reconfigure -fa
+# exit
+# umount -R /mnt
+#
 # void-installer
 #
 
