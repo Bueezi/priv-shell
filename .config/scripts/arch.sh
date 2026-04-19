@@ -11,6 +11,7 @@ echo -n "Username : " && read usr_name
 echo -n "Are u using intel, amd or nvidia ? (i/a/n): " && read hardware
 echo -n "Do you want linux-zen? (y/n)" && read kernel_zen
 echo -n "What WM do u want gnome or sway ? (gnome/sway): " && read wm
+echo -n "Are you using LUKS disk encryption (y/n): " && read encrypt
 
 lsblk && echo -e "-------------------------------------\nDisks :" && lsblk | grep disk && echo -e "\n\n\n"
 
@@ -21,7 +22,11 @@ if [ "$proceed" != "y" ]; then
     exit 1
 fi
 
-LUKS_UUID=$(cryptsetup luksUUID $(cryptsetup status cryptroot | grep 'device:' | awk '{print $2}'))
+if [ "$encrypt" == "y" ]; then
+    UUID=$(cryptsetup luksUUID $(cryptsetup status cryptroot | grep 'device:' | awk '{print $2}'))
+else
+    UUID=$(blkid -s UUID -o value $(findmnt -n -o SOURCE /mnt))
+fi
 
 # Enable multilib in live environment & increase parallel downloads
 sed -i '/#\[multilib\]/,/#Include/ s/^#//' /etc/pacman.conf
@@ -52,7 +57,7 @@ fi
 
 
 if [ "$wm" == "sway" ]; then
-    wm_packages="sway swaybg swaylock swayidle swaybar wl-clipboard xorg-xwayland xdg-desktop-portal-wlr seatd polkit polkit-gnome \
+    wm_packages="sway swaybg swaylock swayidle wl-clipboard xorg-xwayland xdg-desktop-portal-wlr polkit polkit-gnome \
     foot fuzzel mako i3status-rust brightnessctl networkmanager-dmenu grim slurp cliphist power-profiles-daemon \
     blueman nwg-look thunar gnome-themes-extra"
     wm_packages_aur=""
@@ -66,31 +71,37 @@ fi
 audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack lib32-pipewire-jack"
 
 bash_tools="bc vim htop btop openssh wireguard-tools curl wget bash-completion man-db \
-man-pages zip unzip 7zip ntfs-3g dosfstools less \
+man-pages zip unzip 7zip dosfstools less \
 fastfetch cowsay cmatrix ffmpeg mpv stress gamemode lib32-gamemode fd nnn"
 
 fonts="ttf-iosevka-nerd ttf-jetbrains-mono-nerd ttf-noto-nerd"
-apps="helix chromium steam vlc zed baobab libreoffice-still"
+apps="helix zed chromium steam baobab libreoffice-still"
 aur="librewolf-bin $wm_packages_aur"
-dev="github-cli nodejs npm rust gdb python python-pip python-virtualenv docker docker-compose"
-#aur_slow="protonplus ani-cli stremio" 
+dev="github-cli nodejs npm rust gdb python python-pip python-virtualenv podman podman-compose"
+aur_slow="protonplus ani-cli" # stremio
 package_list="$hardware $wm_packages $audio $bash_tools $fonts $apps $dev"
 
-base="linux-firmware base base-devel git efibootmgr networkmanager sudo vi vim bluez bluez-utils ufw cryptsetup reflector qt5-wayland qt6-wayland gnome-keyring"
+base="linux-firmware base base-devel git efibootmgr networkmanager sudo vi vim bluez bluez-utils ufw cryptsetup reflector qt5-wayland qt6-wayland gnome-keyring xdg-user-dirs"
 
+# Local Pacman mirrors
+cp /mnt/etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist.bak
+reflector --country 'Belgium,France,Netherlands,Germany' --age 12 --protocol https --sort rate --fastest 10 --save /etc/pacman.d/mirrorlist
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+
+pacman -Syy
 pacstrap -K /mnt $base $package_list
-genfstab -U /mnt >>/mnt/etc/fstab
+genfstab -U /mnt >/mnt/etc/fstab
 arch-chroot /mnt <<EOF
 
 ln -sf /usr/share/zoneinfo/Europe/Brussels /etc/localtime
 hwclock --systohc
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
-echo "KEYMAP=us" >> /etc/vconsole.conf
-echo "arch" >> /etc/hostname
+echo "KEYMAP=us" > /etc/vconsole.conf
+echo "arch" > /etc/hostname
 echo "root:$root_pass" | chpasswd
-useradd -m -G wheel,seat "$usr_name"
+useradd -m -G wheel "$usr_name"
 echo "$usr_name:$root_pass" | chpasswd
 sed -i "s/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
 
@@ -100,12 +111,14 @@ chown -R $usr_name:$usr_name /home/$usr_name
 systemctl enable NetworkManager
 systemctl enable bluetooth.service
 systemctl enable ufw
+systemctl enable power-profiles-daemon
+systemctl enable fstrim.timer # SSD TRIM
 ufw default deny incoming
 ufw default allow outgoing
 ufw enable
 
 if [ "$wm" == "sway" ]; then
-    systemctl enable seatd.service
+    systemctl enable polkit.service # we are using polkit instead of seatd since we need will use it with polkit-gnome for privilige evelation prompts.
     # Setup synced dotfiles.
     su - $usr_name -c "git clone --bare https://github.com/Bueezi/dotfiles.git /home/$usr_name/.dotfiles"
     su - $usr_name -c "/usr/bin/git --git-dir=/home/$usr_name/.dotfiles --work-tree=/home/$usr_name config --local status.showUntrackedFiles no"
@@ -117,15 +130,26 @@ fi
 mkdir -p /boot/loader/entries
 touch /boot/loader/entries/arch.conf
 
-echo -e "default arch.conf\ntimeout 3\neditor no" > /boot/loader/loader.conf
-echo -e "title   Arch Linux\nlinux   /vmlinuz-${kernel_name}\ninitrd  /${ucode}.img\ninitrd  /initramfs-${kernel_name}.img\noptions rd.luks.name=${LUKS_UUID}=cryptroot root=/dev/mapper/cryptroot rw" > /boot/loader/entries/arch.conf
-sed -i -E \
-    -e 's/\budev\b/systemd/g' \
-    -e 's/\bkeymap\b//g' \
-    -e 's/\bconsolefont\b//g' \
-    -e 's/\bfilesystems\b/sd-encrypt filesystems/' \
-    /etc/mkinitcpio.conf
-mkinitcpio -P
+echo -e "default arch.conf\ntimeout 0\neditor no" > /boot/loader/loader.conf
+
+if [ "$encrypt" == "y" ]; then
+    echo -e "title   Arch Linux\nlinux   /vmlinuz-${kernel_name}\ninitrd  /${ucode}.img\ninitrd  /initramfs-${kernel_name}.img\noptions rd.luks.name=${UUID}=cryptroot root=/dev/mapper/cryptroot rw" > /boot/loader/entries/arch.conf
+    sed -i -E \
+        -e 's/\budev\b/systemd/g' \
+        -e 's/\bkeymap\b//g' \
+        -e 's/\bconsolefont\b//g' \
+        -e 's/\bfilesystems\b/sd-encrypt filesystems/' \
+        /etc/mkinitcpio.conf
+    mkinitcpio -P
+else
+    echo -e "title   Arch Linux\nlinux   /vmlinuz-${kernel_name}\ninitrd  /${ucode}.img\ninitrd  /initramfs-${kernel_name}.img\noptions root=${UUID} rw" > /boot/loader/entries/arch.conf
+    sed -i -E \
+        -e 's/\budev\b/systemd/g' \
+        -e 's/\bkeymap\b//g' \
+        -e 's/\bconsolefont\b//g' \
+        /etc/mkinitcpio.conf
+    mkinitcpio -P
+fi
 
 # Enable multilib, parallel downloads, colors, and ILoveCandy
 cp /etc/pacman.conf /etc/pacman.conf.bak
@@ -145,10 +169,6 @@ su - $usr_name -c "git clone https://aur.archlinux.org/yay.git ~/yay && cd ~/yay
 su - $usr_name -c "yay -S --noconfirm $aur $aur_slow"
 
 sed -i "/^$usr_name ALL=(ALL) NOPASSWD: ALL$/d" /etc/sudoers # Remove NOPASSWD line
-
-# Local Pacman mirrors
-cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-reflector --country 'Belgium,France,Netherlands,Germany' --age 12 --protocol https --sort rate --fastest 10 --save /etc/pacman.d/mirrorlist
 
 EOF
 bootctl --path=/mnt/boot install
