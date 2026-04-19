@@ -1,6 +1,6 @@
 # ~/.config/swaylock/config
 
-image=~/Documents/wallpaper/car.jpg
+image=~/Documents/wp/car.jpg
 indicator-radius=120
 indicator-thickness=15
 ring-color=4c7899

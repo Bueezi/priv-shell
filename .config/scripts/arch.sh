@@ -57,10 +57,10 @@ fi
 
 
 if [ "$wm" == "sway" ]; then
-    wm_packages="sway swaybg swaylock swayidle wl-clipboard xorg-xwayland xdg-desktop-portal-wlr polkit polkit-gnome \
+    wm_packages="swaybg swaylock swayidle wl-clipboard xorg-xwayland xdg-desktop-portal-wlr xdg-desktop-portal-gtk polkit polkit-gnome \
     foot fuzzel mako i3status-rust brightnessctl networkmanager-dmenu grim slurp cliphist power-profiles-daemon \
-    blueman nwg-look thunar gnome-themes-extra"
-    wm_packages_aur=""
+    blueman nwg-look thunar thunar-archive-plugin gnome-themes-extra eog "
+    wm_packages_aur="sway-git"
 elif [ "$wm" == "gnome" ]; then
     wm_packages="gdm gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks \
     gnome-system-monitor xdg-utils xdg-desktop-portal-gnome gnome-backgrounds gnome-disk-utility \
@@ -72,23 +72,18 @@ audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire
 
 bash_tools="bc vim htop btop openssh wireguard-tools curl wget bash-completion man-db \
 man-pages zip unzip 7zip dosfstools less \
-fastfetch cowsay cmatrix ffmpeg mpv stress gamemode lib32-gamemode fd nnn"
+fastfetch cowsay cmatrix ffmpeg mpv stress gamemode lib32-gamemode fd nnn imagemagick"
 
-fonts="ttf-iosevka-nerd ttf-jetbrains-mono-nerd ttf-noto-nerd"
-apps="helix zed chromium steam baobab libreoffice-still"
+fonts="noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ttf-liberation ttf-dejavu ttf-iosevka-nerd"
+apps="helix zed chromium steam discord baobab libreoffice-still"
 aur="librewolf-bin $wm_packages_aur"
 dev="github-cli nodejs npm rust gdb python python-pip python-virtualenv podman podman-compose"
+game="openrgb"
 aur_slow="protonplus ani-cli" # stremio
-package_list="$hardware $wm_packages $audio $bash_tools $fonts $apps $dev"
+package_list="$hardware $wm_packages $audio $bash_tools $fonts $apps $dev $game"
 
 base="linux-firmware base base-devel git efibootmgr networkmanager sudo vi vim bluez bluez-utils ufw cryptsetup reflector qt5-wayland qt6-wayland gnome-keyring xdg-user-dirs"
 
-# Local Pacman mirrors
-cp /mnt/etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist.bak
-reflector --country 'Belgium,France,Netherlands,Germany' --age 12 --protocol https --sort rate --fastest 10 --save /etc/pacman.d/mirrorlist
-cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-
-pacman -Syy
 pacstrap -K /mnt $base $package_list
 genfstab -U /mnt >/mnt/etc/fstab
 arch-chroot /mnt <<EOF
@@ -122,7 +117,7 @@ if [ "$wm" == "sway" ]; then
     # Setup synced dotfiles.
     su - $usr_name -c "git clone --bare https://github.com/Bueezi/dotfiles.git /home/$usr_name/.dotfiles"
     su - $usr_name -c "/usr/bin/git --git-dir=/home/$usr_name/.dotfiles --work-tree=/home/$usr_name config --local status.showUntrackedFiles no"
-    su - $usr_name -c "/usr/bin/git --git-dir=/home/$usr_name/.dotfiles --work-tree=/home/$usr_name checkout"
+    su - $usr_name -c "/usr/bin/git --git-dir=/home/$usr_name/.dotfiles --work-tree=/home/$usr_name checkout -f"
 elif [ "$wm" == "gnome" ]; then
     systemctl enable gdm
 fi
@@ -142,7 +137,7 @@ if [ "$encrypt" == "y" ]; then
         /etc/mkinitcpio.conf
     mkinitcpio -P
 else
-    echo -e "title   Arch Linux\nlinux   /vmlinuz-${kernel_name}\ninitrd  /${ucode}.img\ninitrd  /initramfs-${kernel_name}.img\noptions root=${UUID} rw" > /boot/loader/entries/arch.conf
+    echo -e "title   Arch Linux\nlinux   /vmlinuz-${kernel_name}\ninitrd  /${ucode}.img\ninitrd  /initramfs-${kernel_name}.img\noptions root=UUID=${UUID} rw" > /boot/loader/entries/arch.conf
     sed -i -E \
         -e 's/\budev\b/systemd/g' \
         -e 's/\bkeymap\b//g' \
@@ -170,7 +165,16 @@ su - $usr_name -c "yay -S --noconfirm $aur $aur_slow"
 
 sed -i "/^$usr_name ALL=(ALL) NOPASSWD: ALL$/d" /etc/sudoers # Remove NOPASSWD line
 
+# Local Pacman mirrors
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+reflector --country 'Belgium,France,Netherlands,Germany' --age 24 --protocol https --latest 20 --sort rate --save /etc/pacman.d/mirrorlist
+# Prepend the Arch CDN at the top of the list
+sed -i '1s/^/Server = https:\/\/mirror.pkgbuild.com\/$repo\/os\/$arch\n/' /etc/pacman.d/mirrorlist
+
 EOF
 bootctl --path=/mnt/boot install
 
 echo "Install finished !"
+
+# things to do :
+# run default.sh, disable resist fingerprinting, run dmenu_networkmanager once

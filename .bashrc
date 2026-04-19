@@ -18,11 +18,15 @@ alias gc='gcc -std=c99 -Wall -Wextra -pedantic'
 
 alias hx='helix'
 
-# _host=$(hostname)
-if [ "$_host" = "void" ]; then
-    alias sudo='doas'
-    alias xi='doas xbps-install'
-    alias helix='hx'
-    alias btop='doas btop --force-utf'
+if [ "$(tty)" = "/dev/tty1" ] && [ -z "$WAYLAND_DISPLAY" ]; then
+    exec sway
 fi
+
+# _host=$(hostname)
+# if [ "$_host" = "void" ]; then
+#     alias sudo='doas'
+#     alias xi='doas xbps-install'
+#     alias helix='hx'
+#     alias btop='doas btop --force-utf'
+# fi
 export PATH=$HOME/.local/bin:$PATH
