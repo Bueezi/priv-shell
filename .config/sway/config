@@ -99,6 +99,7 @@ bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy && notify-send "Screens
 bindsym $mod+Shift+n exec networkmanager_dmenu
 bindsym $mod+Shift+b exec env DMENU_BLUETOOTH_LAUNCHER=fuzzel dmenu-bluetooth
 bindsym $mod+Shift+p exec ~/.config/sway/scripts/power.sh
+bindsym $mod+Shift+t exec ~/.config/sway/scripts/theme.sh
 bindsym $mod+Escape exec swaylock
 bindsym print exec systemctl sleep 
     # Drag floating windows by holding down $mod and left mouse button.

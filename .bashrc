@@ -16,9 +16,9 @@ alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 alias gc='gcc -std=c99 -Wall -Wextra -pedantic'
 
-#alias hx='helix'
+alias hx='helix'
 
-_host=$(hostname)
+# _host=$(hostname)
 if [ "$_host" = "void" ]; then
     alias sudo='doas'
     alias xi='doas xbps-install'
