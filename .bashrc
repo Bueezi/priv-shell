@@ -19,7 +19,7 @@ alias gc='gcc -std=c99 -Wall -Wextra -pedantic'
 alias hx='helix'
 
 if [ "$(tty)" = "/dev/tty1" ] && [ -z "$WAYLAND_DISPLAY" ]; then
-    exec sway
+    WLR_RENDERER=vulkan exec sway
 fi
 
 # _host=$(hostname)

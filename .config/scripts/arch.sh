@@ -169,7 +169,7 @@ sed -i "/^$usr_name ALL=(ALL) NOPASSWD: ALL$/d" /etc/sudoers # Remove NOPASSWD l
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 reflector --country 'Belgium,France,Netherlands,Germany' --age 24 --protocol https --latest 20 --sort rate --save /etc/pacman.d/mirrorlist
 # Prepend the Arch CDN at the top of the list
-sed -i '1s/^/Server = https:\/\/mirror.pkgbuild.com\/$repo\/os\/$arch\n/' /etc/pacman.d/mirrorlist
+sed -i '1s|^|Server = https://mirror.pkgbuild.com/$repo/os/$arch\n|' /etc/pacman.d/mirrorlist
 
 EOF
 bootctl --path=/mnt/boot install
