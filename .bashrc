@@ -18,8 +18,6 @@ alias gc='gcc -std=c99 -Wall -Wextra -pedantic'
 
 alias hx='helix'
 
-alias godot='godot-mono --display-driver wayland'
-
 if [ "$(tty)" = "/dev/tty1" ] && [ -z "$WAYLAND_DISPLAY" ]; then
     WLR_RENDERER=vulkan exec sway
 fi

@@ -51,6 +51,9 @@ exec eval $(gnome-keyring-daemon --start --components=secrets)
 # screensharing
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway DISPLAY XAUTHORITY
 
+exec openrgb -m off
+exec test -d /sys/class/power_supply/BAT0 && pactl set-sink-volume @default@ 0%
+
 ### Variables
 set $mod Mod4
 set $left h
@@ -58,6 +61,7 @@ set $down j
 set $up k
 set $right l
 set $term foot
+set $fm thunar
 set $menu fuzzel
 
 ### Output configuration
@@ -97,9 +101,12 @@ input type:touchpad {
 # Basics:
 #
 bindsym $mod+Return exec $term
+bindsym $mod+Shift+Return exec $term --app-id=floating
+bindsym $mod+Shift+e exec $fm
 bindsym $mod+q kill
 bindsym $mod+d exec $menu
 bindsym $mod+shift+v exec cliphist list | fuzzel --dmenu | cliphist decode | wl-copy
+bindsym $mod+shift+d exec ~/.config/sway/scripts/discord.sh
 bindsym $mod+shift+a exec ~/.config/sway/scripts/audio_switch.sh
 bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot in clipboard"
 bindsym $mod+Shift+n exec networkmanager_dmenu
@@ -115,7 +122,10 @@ bindsym print exec systemctl sleep
     floating_modifier $mod normal
 
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit SwayFX? This will end your Wayland session.' -B 'Yes, exit SwayFX' 'swaymsg exit'
+bindsym $mod+Shift+m exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit SwayFX? This will end your Wayland session.' -B 'Yes, exit SwayFX' 'swaymsg exit'
+
+for_window [app_id="^(floating|Thunar|blueman-manager|org.gnome.FileRoller|org.gnome.eog)$"] floating enable, resize set 900 600, move position center
+for_window [class="Spotify"] floating enable, resize set 900 600, move position center
 
 # Moving around:
     # Move your focus around
@@ -247,7 +257,7 @@ bar {
     workspace_min_width 30
     status_command i3status-rs ~/.config/sway/i3status.toml
 
-    # font pango:Noto Nerd Font 9
+    font pango:Noto Sans 9
 
     tray_output *
 

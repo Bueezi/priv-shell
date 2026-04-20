@@ -71,11 +71,11 @@ fi
 audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack lib32-pipewire-jack"
 
 bash_tools="bc vim htop btop rocm-smi-lib openssh wireguard-tools curl wget bash-completion man-db \
-man-pages zip unzip 7zip dosfstools less \
+man-pages file-roller zip unzip 7zip dosfstools less \
 fastfetch cowsay cmatrix ffmpeg mpv stress gamemode lib32-gamemode fd nnn imagemagick"
 
 fonts="noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ttf-liberation ttf-dejavu ttf-iosevka-nerd"
-apps="helix zed chromium steam discord baobab libreoffice-still"
+apps="helix zed chromium steam discord spotify-launcher baobab libreoffice-still"
 aur="librewolf-bin $wm_packages_aur"
 dev="github-cli nodejs npm rust gdb python python-pip python-virtualenv podman podman-compose"
 game="openrgb"
