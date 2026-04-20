@@ -70,7 +70,7 @@ fi
 
 audio="pipewire lib32-pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack lib32-pipewire-jack"
 
-bash_tools="bc vim htop btop openssh wireguard-tools curl wget bash-completion man-db \
+bash_tools="bc vim htop btop rocm-smi-lib openssh wireguard-tools curl wget bash-completion man-db \
 man-pages zip unzip 7zip dosfstools less \
 fastfetch cowsay cmatrix ffmpeg mpv stress gamemode lib32-gamemode fd nnn imagemagick"
 
