@@ -13,6 +13,7 @@ alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
 
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+alias configup='config add -u && config commit -m "update" && config push'
 
 alias gc='gcc -std=c99 -Wall -Wextra -pedantic'
 
