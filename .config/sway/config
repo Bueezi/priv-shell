@@ -124,7 +124,7 @@ bindsym print exec systemctl sleep
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+m exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit SwayFX? This will end your Wayland session.' -B 'Yes, exit SwayFX' 'swaymsg exit'
 
-for_window [app_id="^(floating|Thunar|blueman-manager|org.gnome.FileRoller|org.gnome.eog)$"] floating enable, resize set 900 600, move position center
+for_window [app_id="^(floating|Thunar|thunar|blueman-manager|org.gnome.FileRoller|org.gnome.eog)$"] floating enable, resize set 900 600, move position center
 for_window [class="Spotify"] floating enable, resize set 900 600, move position center
 
 # Moving around:
